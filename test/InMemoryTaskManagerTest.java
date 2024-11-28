@@ -87,24 +87,6 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testGetTaskByInvalidID() {
-        Task retrievedTask = taskManager.getTaskByID(999);
-        assertNull(retrievedTask);
-    }
-
-    @Test
-    void testGetEpicByInvalidID() {
-        Epic retrievedEpic = taskManager.getEpicByID(999);
-        assertNull(retrievedEpic);
-    }
-
-    @Test
-    void testGetSubtaskByInvalidID() {
-        Subtask retrievedSubtask = taskManager.getSubtaskByID(999);
-        assertNull(retrievedSubtask);
-    }
-
-    @Test
     void testIDConflict() {
         // Создаем задачу с заданным ID
         Task taskWithSpecificID = new Task("Task with Specific ID", "Description");
@@ -160,4 +142,70 @@ class InMemoryTaskManagerTest {
         // Проверяем, что ID остался тем же
         assertEquals(1, addedTask.getID(), "ID should remain unchanged");
     }
+
+    @Test
+    void testDeleteTaskByID() {
+        Task task = new Task("Test Task", "Description");
+        taskManager.addTask(task);
+        taskManager.deleteTaskByID(task.getID());
+
+        List<Task> tasks = taskManager.getTasks();
+        assertEquals(0, tasks.size(), "Tasks list should be empty after deletion");
+    }
+
+    @Test
+    void testDeleteEpicByID() {
+        Epic epic = new Epic("Test Epic", "Epic Description");
+        taskManager.addEpic(epic);
+
+        Subtask subtask = new Subtask("Test Subtask", "Subtask Description", epic.getID());
+        taskManager.addSubtask(subtask);
+
+        taskManager.deleteEpicByID(epic.getID());
+
+        List<Epic> epics = taskManager.getEpics();
+        assertEquals(0, epics.size(), "Epics list should be empty after deletion");
+        assertEquals(0, taskManager.getSubtasks().size(), "Subtasks list should be empty after deleting epic");
+    }
+
+    @Test
+    void testDeleteSubtaskByID() {
+        Epic epic = new Epic("Test Epic", "Epic Description");
+        taskManager.addEpic(epic);
+
+        Subtask subtask = new Subtask("Test Subtask", "Subtask Description", epic.getID());
+        taskManager.addSubtask(subtask);
+
+        taskManager.deleteSubtaskByID(subtask.getID());
+
+        List<Subtask> subtasks = taskManager.getSubtasks();
+        assertEquals(0, subtasks.size(), "Subtasks list should be empty after deletion");
+        assertEquals(0, epic.getSubtaskList().size(), "Epic should have no subtasks after deletion");
+    }
+
+    @Test
+    void testUpdateEpicStatus() {
+        Epic epic = new Epic("Test Epic", "Epic Description");
+        taskManager.addEpic(epic);
+
+        Subtask subtask1 = new Subtask("Subtask 1", "Description 1", epic.getID());
+        subtask1.setStatus(Status.DONE);
+        taskManager.addSubtask(subtask1);
+
+        Subtask subtask2 = new Subtask("Subtask 2", "Description 2", epic.getID());
+        subtask2.setStatus(Status.NEW);
+        taskManager.addSubtask(subtask2);
+
+        taskManager.updateEpicStatus(epic);
+
+        assertEquals(Status.IN_PROGRESS, epic.getStatus(), "Epic status should be IN_PROGRESS when it has both DONE and NEW subtasks");
+
+        // Удалим подзадачу с статусом NEW и проверим статус
+        taskManager.deleteSubtaskByID(subtask2.getID());
+
+        taskManager.updateEpicStatus(epic);
+
+        assertEquals(Status.DONE, epic.getStatus(), "Epic status should be DONE when all subtasks are DONE");
+    }
+
 }

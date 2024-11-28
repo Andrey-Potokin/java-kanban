@@ -55,22 +55,40 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void testHistoryLimit() {
-        for (int i = 1; i <= 15; i++) {
-            Task task = new Task("Task " + i, "Description " + i);
-            task.setID(i);
-            historyManager.addTaskHistory(task);
-        }
+    void testRemoveNodeFromHistory() {
+        Task task1 = new Task("Test Task 1", "Description 1");
+        task1.setID(1);
+        Task task2 = new Task("Test Task 2", "Description 2");
+        task2.setID(2);
+
+        // Добавляем задачи в историю
+        historyManager.addTaskHistory(task1);
+        historyManager.addTaskHistory(task2);
+
+        // Удаляем первую задачу из истории
+        historyManager.removeNode(historyManager.nodes.get(task1.getID()));
 
         // Получаем историю задач
         List<Task> history = historyManager.getHistory();
 
-        // Проверяем, что история содержит только последние 10 задач
-        assertEquals(10, history.size(), "History should contain only the last 10 tasks");
+        // Проверяем, что история содержит только одну задачу
+        assertEquals(1, history.size(), "History should contain one task after removal");
+        assertEquals(task2.getID(), history.get(0).getID(), "Remaining task ID should match");
+    }
 
-        // Проверяем, что последние добавленные задачи в истории соответствуют ожидаемым
-        for (int i = 6; i <= 15; i++) {
-            assertEquals(i, history.get(i - 6).getID(), "Task ID should match for task " + i);
-        }
+    @Test
+    void testAddSameTaskMultipleTimes() {
+        Task task = new Task("Test Task", "Description");
+        task.setID(1);
+
+        // Добавляем задачу в историю дважды
+        historyManager.addTaskHistory(task);
+        historyManager.addTaskHistory(task);
+
+        // Получаем историю задач
+        List<Task> history = historyManager.getHistory();
+
+        // Проверяем, что история содержит только одну задачу
+        assertEquals(1, history.size(), "History should contain one unique task");
     }
 }
