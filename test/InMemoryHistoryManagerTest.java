@@ -66,7 +66,7 @@ class InMemoryHistoryManagerTest {
         historyManager.addTaskHistory(task2);
 
         // Удаляем первую задачу из истории
-        historyManager.removeNode(historyManager.nodes.get(task1.getID()));
+        historyManager.removeNode(historyManager.getNodes().get(task1.getID()));
 
         // Получаем историю задач
         List<Task> history = historyManager.getHistory();
@@ -75,6 +75,8 @@ class InMemoryHistoryManagerTest {
         assertEquals(1, history.size(), "History should contain one task after removal");
         assertEquals(task2.getID(), history.get(0).getID(), "Remaining task ID should match");
     }
+
+
 
     @Test
     void testAddSameTaskMultipleTimes() {

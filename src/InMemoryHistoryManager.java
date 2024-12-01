@@ -1,17 +1,14 @@
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-
-    private final DoublyLinkedList<Task> tasksHistory = new DoublyLinkedList<>(); // хранит историю просмотров задач
-    final Map<Integer, Node<Task>> nodes = new HashMap<>(); // хранит узлы
+    private final DoublyLinkedList<Task> tasksHistory = new DoublyLinkedList<>();
 
     @Override
     public void addTaskHistory(Task task) {
-        if (nodes.containsKey(task.getID())) {
-            removeNode(nodes.get(task.getID()));
+        if (tasksHistory.getNodes().containsKey(task.getID())) {
+            removeNode(tasksHistory.getNodes().get(task.getID()));
         }
         tasksHistory.linkLast(task);
-        nodes.put(task.getID(), tasksHistory.getLastNode());
     }
 
     @Override
@@ -21,18 +18,25 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void removeNode(Node<Task> node) {
-        if (node == null) return;
         tasksHistory.remove(node);
-        nodes.remove(node.data.getID());
     }
 
-    private static class DoublyLinkedList<T> {
+    @Override
+    public Map<Integer, Node<Task>> getNodes() {
+        return tasksHistory.getNodes();
+    }
 
+
+    private static class DoublyLinkedList<T> {
         private Node<T> head;
         private Node<T> tail;
         private int size = 0;
+        private final Map<Integer, Node<T>> nodes = new HashMap<>();
 
-        // добавляет задачу в конец списка
+        public Map<Integer, Node<T>> getNodes() {
+            return nodes;
+        }
+
         public void linkLast(T element) {
             final Node<T> oldTail = tail;
             final Node<T> newNode = new Node<>(oldTail, element, null);
@@ -40,24 +44,24 @@ public class InMemoryHistoryManager implements HistoryManager {
             if (oldTail == null) {
                 head = newNode;
             } else {
-                oldTail.next = newNode;
-                newNode.prev = oldTail;
+                oldTail.setNext(newNode);
+                newNode.setPrev(oldTail);
             }
             size++;
+
+            nodes.put(((Task) element).getID(), newNode);
         }
 
-        // собирает все задачи
         public List<Task> getTask() {
             List<Task> tasks = new ArrayList<>();
             Node<T> current = head;
             while (current != null) {
-                tasks.add((Task) current.data);
-                current = current.next;
+                tasks.add((Task) current.getData());
+                current = current.getNext();
             }
             return tasks;
         }
 
-        // возвращает последний узел
         public Node<T> getLastNode() {
             return tail;
         }
@@ -65,24 +69,29 @@ public class InMemoryHistoryManager implements HistoryManager {
         public void remove(Node<T> node) {
             if (node == null) return;
 
-            Node<T> prevNode = node.prev;
-            Node<T> nextNode = node.next;
-
-            if (prevNode == null) {
-                head = nextNode;
+            if (node == head) {
+                head = node.getNext();
             } else {
-                prevNode.next = nextNode;
-                node.prev = null;
+                node.getPrev().setNext(node.getNext());
             }
 
-            if (nextNode == null) {
-                tail = prevNode;
+            if (node == tail) {
+                tail = node.getPrev();
             } else {
-                nextNode.prev = prevNode;
-                node.next = null;
+                node.getNext().setPrev(node.getPrev());
             }
+
             size--;
+
+            node.setPrev(null);
+            node.setNext(null);
+
+            if (node.getData() instanceof Task) {
+                nodes.remove(((Task) node.getData()).getID());
+            }
         }
+
+
 
         public int size() {
             return this.size;
