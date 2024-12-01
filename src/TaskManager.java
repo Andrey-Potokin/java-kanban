@@ -11,6 +11,8 @@ public interface TaskManager {
 
     Epic updateEpic(Epic epic);
 
+    void updateEpicStatus(Epic epic);
+
     Subtask updateSubtask(Subtask subtask);
 
     Task getTaskByID(int id);
