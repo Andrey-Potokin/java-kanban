@@ -1,5 +1,5 @@
 public class Task {
-    private int Id;
+    private int id;
     private String title;
     private String description;
     private Status status;
@@ -11,8 +11,8 @@ public class Task {
         this.type = type;
     }
 
-    public Task(int Id, String title, String description, Status status, Type type) {
-        this.Id = Id;
+    public Task(int id, String title, String description, Status status, Type type) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
@@ -36,11 +36,11 @@ public class Task {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
-    public void setId(int Id) {
-        this.Id = Id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Status getStatus() {
@@ -85,7 +85,7 @@ public class Task {
         return "Task{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", Id=" + Id +
+                ", id=" + id +
                 ", status=" + status +
                 '}';
     }

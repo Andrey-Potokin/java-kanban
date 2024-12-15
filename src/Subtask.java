@@ -7,8 +7,8 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
-    public Subtask(int Id, String title, String description, Status status, Type type, int epicId) {
-        super(Id, title, description, status, type);
+    public Subtask(int id, String title, String description, Status status, Type type, int epicId) {
+        super(id, title, description, status, type);
         this.epicId = epicId;
     }
 
@@ -21,7 +21,7 @@ public class Subtask extends Task {
         return "Subtask{" +
                 "title='" + getTitle() + '\'' +
                 ", description='" + getDescription() + '\'' +
-                ", Id=" + getId() +
+                ", id=" + getId() +
                 ", epicId=" + epicId +
                 ", status=" + getStatus() +
                 '}';

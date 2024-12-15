@@ -8,8 +8,8 @@ public class Epic extends Task {
         super(title, description, type);
     }
 
-    public Epic(int Id, String title, String description, Status status, Type type) {
-        super(Id, title, description, status, type);
+    public Epic(int id, String title, String description, Status status, Type type) {
+        super(id, title, description, status, type);
     }
 
     public void addSubtask(Subtask subtask) {
@@ -33,7 +33,7 @@ public class Epic extends Task {
         return "Epic{" +
                 "title= " + getTitle() + '\'' +
                 ", description = " + getDescription() + '\'' +
-                ", Id=" + getId() +
+                ", id=" + getId() +
                 ", subtaskList.size = " + subtaskList.size() +
                 ", status = " + getStatus() +
                 '}';
