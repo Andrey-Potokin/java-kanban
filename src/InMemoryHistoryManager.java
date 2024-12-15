@@ -1,12 +1,15 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private final DoublyLinkedList<Task> tasksHistory = new DoublyLinkedList<>();
 
     @Override
     public void addTaskHistory(Task task) {
-        if (tasksHistory.getNodes().containsKey(task.getID())) {
-            removeNode(tasksHistory.getNodes().get(task.getID()));
+        if (tasksHistory.getNodes().containsKey(task.getId())) {
+            removeNode(tasksHistory.getNodes().get(task.getId()));
         }
         tasksHistory.linkLast(task);
     }
@@ -16,11 +19,13 @@ public class InMemoryHistoryManager implements HistoryManager {
         return tasksHistory.getTask();
     }
 
+    // todo должен быть метод remove(int Id)
     @Override
     public void removeNode(Node<Task> node) {
         tasksHistory.remove(node);
     }
 
+    // todo тогда этот метод не понадобится
     @Override
     public Map<Integer, Node<Task>> getNodes() {
         return tasksHistory.getNodes();
@@ -49,7 +54,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
             size++;
 
-            nodes.put(((Task) element).getID(), newNode);
+            nodes.put(((Task) element).getId(), newNode);
         }
 
         public List<Task> getTask() {
@@ -87,7 +92,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             node.setNext(null);
 
             if (node.getData() instanceof Task) {
-                nodes.remove(((Task) node.getData()).getID());
+                nodes.remove(((Task) node.getData()).getId());
             }
         }
 

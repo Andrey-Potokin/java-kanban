@@ -1,21 +1,22 @@
 public class Task {
-
+    private int Id;
     private String title;
     private String description;
-    private int id;
     private Status status;
+    private Type type;
 
-    public Task(int id, String title, String description, Status status) {
-        this.id = id;
+    public Task(String title, String description, Type type) {
+        this.title = title;
+        this.description = description;
+        this.type = type;
+    }
+
+    public Task(int Id, String title, String description, Status status, Type type) {
+        this.Id = Id;
         this.title = title;
         this.description = description;
         this.status = status;
-    }
-
-    public Task(String title, String description) {
-        this.title = title;
-        this.description = description;
-        this.status = Status.NEW;
+        this.type = type;
     }
 
     public String getTitle() {
@@ -34,12 +35,12 @@ public class Task {
         this.description = description;
     }
 
-    public int getID() {
-        return id;
+    public int getId() {
+        return Id;
     }
 
-    public void setID(int id) {
-        this.id = id;
+    public void setId(int Id) {
+        this.Id = Id;
     }
 
     public Status getStatus() {
@@ -50,12 +51,20 @@ public class Task {
         this.status = status;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return getID() == task.getID();
+        return getId() == task.getId();
     }
 
     @Override
@@ -76,7 +85,7 @@ public class Task {
         return "Task{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", id=" + id +
+                ", Id=" + Id +
                 ", status=" + status +
                 '}';
     }
