@@ -1,21 +1,22 @@
 public class Task {
-
+    private int id;
     private String title;
     private String description;
-    private int id;
     private Status status;
+    private Type type;
 
-    public Task(int id, String title, String description, Status status) {
+    public Task(String title, String description, Type type) {
+        this.title = title;
+        this.description = description;
+        this.type = type;
+    }
+
+    public Task(int id, String title, String description, Status status, Type type) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
-    }
-
-    public Task(String title, String description) {
-        this.title = title;
-        this.description = description;
-        this.status = Status.NEW;
+        this.type = type;
     }
 
     public String getTitle() {
@@ -34,11 +35,11 @@ public class Task {
         this.description = description;
     }
 
-    public int getID() {
+    public int getId() {
         return id;
     }
 
-    public void setID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -50,12 +51,20 @@ public class Task {
         this.status = status;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return getID() == task.getID();
+        return getId() == task.getId();
     }
 
     @Override
