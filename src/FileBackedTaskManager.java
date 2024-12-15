@@ -69,19 +69,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     // создает задачу из строки
     public static Task fromString(String value) {
         String[] split = value.split(", ");
-        int Id = Integer.parseInt(split[0]);
+        int id = Integer.parseInt(split[0]);
         Type type = Type.valueOf(split[1]);
         String title = split[2];
         Status status = Status.valueOf(split[3]);
         String description = split[4];
 
         if (split[1].equals("TASK")) {
-            return new Task(Id, title, description, status, type);
+            return new Task(id, title, description, status, type);
         } else if (split[1].equals("EPIC")) {
-            return new Epic(Id, title, description, status, type);
+            return new Epic(id, title, description, status, type);
         } else {
             int epicId = Integer.parseInt(split[5]);
-            return new Subtask(Id, title, description, status, type, epicId);
+            return new Subtask(id, title, description, status, type, epicId);
         }
     }
 
@@ -140,20 +140,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void deleteTaskById(int Id) {
-        super.deleteTaskById(Id);
+    public void deleteTaskById(int id) {
+        super.deleteTaskById(id);
         save();
     }
 
     @Override
-    public void deleteEpicById(int Id) {
-        super.deleteEpicById(Id);
+    public void deleteEpicById(int id) {
+        super.deleteEpicById(id);
         save();
     }
 
     @Override
-    public void deleteSubtaskById(int Id) {
-        super.deleteSubtaskById(Id);
+    public void deleteSubtaskById(int id) {
+        super.deleteSubtaskById(id);
         save();
     }
 
