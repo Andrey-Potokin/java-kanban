@@ -1,5 +1,8 @@
+import managers.InMemoryTaskManager;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import tasks.Epic;
+import tasks.Subtask;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -13,10 +16,10 @@ class EpicTest {
     @BeforeAll
     public static void beforeAll() {
         manager = new InMemoryTaskManager();
-        epic1 = new Epic("Задача 1", "Описание задачи 1", Type.EPIC);
+        epic1 = new Epic("Задача 1", "Описание задачи 1");
         manager.addEpic(epic1);
-        epic2 = new Epic("Задача 2", "Описание задачи 2", Type.EPIC);
-        subtask = new Subtask("Подзадача", "Описание подзадачи", Type.SUBTASK, epic1.getId());
+        epic2 = new Epic("Задача 2", "Описание задачи 2");
+        subtask = new Subtask("Подзадача", "Описание подзадачи", epic1.getId());
     }
 
     @Test

@@ -1,5 +1,10 @@
+import managers.InMemoryTaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,7 +23,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testAddTask() throws IOException {
-        Task task = new Task(1, "Задача", "Описание", Status.NEW, Type.TASK);
+        Task task = new Task(1, "Задача", "Описание", Status.NEW);
         taskManager.addTask(task);
 
         List<Task> tasks = taskManager.getTasks();
@@ -29,7 +34,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testAddEpic() {
-        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW, Type.EPIC);
+        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW);
         taskManager.addEpic(epic);
 
         List<Epic> epics = taskManager.getEpics();
@@ -40,7 +45,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testAddSubtask() {
-        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW, Type.EPIC);
+        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW);
         taskManager.addEpic(epic);
 
         Subtask subtask = new Subtask(
@@ -48,7 +53,6 @@ class InMemoryTaskManagerTest {
                 "Сабтаск",
                 "Описание сабтаска",
                 Status.NEW,
-                Type.SUBTASK,
                 1
         );
         taskManager.addSubtask(subtask);
@@ -61,7 +65,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testGetTaskById() throws IOException {
-        Task task = new Task(1, "Задача", "Описание", Status.NEW, Type.TASK);
+        Task task = new Task(1, "Задача", "Описание", Status.NEW);
         taskManager.addTask(task);
 
         Task retrievedTask = taskManager.getTaskById(task.getId());
@@ -72,7 +76,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testGetEpicById() {
-        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW, Type.EPIC);
+        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW);
         taskManager.addEpic(epic);
 
         Epic retrievedEpic = taskManager.getEpicById(epic.getId());
@@ -83,7 +87,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testGetSubtaskById() {
-        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW, Type.EPIC);
+        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW);
         taskManager.addEpic(epic);
 
         Subtask subtask = new Subtask(
@@ -91,7 +95,6 @@ class InMemoryTaskManagerTest {
                 "Сабтаск",
                 "Описание сабтаска",
                 Status.NEW,
-                Type.SUBTASK,
                 1
         );
         taskManager.addSubtask(subtask);
@@ -105,7 +108,7 @@ class InMemoryTaskManagerTest {
     @Test
     void testTaskImmutabilityOnAdd() throws IOException {
         // Создаем задачу с определенными полями
-        Task originalTask = new Task(1, "Задача", "Описание",Status.NEW, Type.TASK);
+        Task originalTask = new Task(1, "Задача", "Описание",Status.NEW);
         originalTask.setId(1); // Устанавливаем конкретный Id
 
         // Сохраняем значения полей оригинальной задачи
@@ -122,7 +125,7 @@ class InMemoryTaskManagerTest {
         // Проверяем, что поля добавленной задачи совпадают с оригинальной задачей
         assertEquals(originalTitle, addedTask.getTitle(), "Title should remain unchanged");
         assertEquals(originalDescription, addedTask.getDescription(), "Description should remain unchanged");
-        assertEquals(originalStatus, addedTask.getStatus(), "Status should remain unchanged");
+        assertEquals(originalStatus, addedTask.getStatus(), "tasks.Status should remain unchanged");
 
         // Проверяем, что Id остался тем же
         assertEquals(1, addedTask.getId(), "Id should remain unchanged");
@@ -130,7 +133,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testDeleteTaskById() throws IOException {
-        Task task = new Task(1, "Задача", "Описание", Status.NEW, Type.TASK);
+        Task task = new Task(1, "Задача", "Описание", Status.NEW);
         taskManager.addTask(task);
         taskManager.deleteTaskById(task.getId());
 
@@ -140,7 +143,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testDeleteEpicById() {
-        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW, Type.EPIC);
+        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW);
         taskManager.addEpic(epic);
 
         Subtask subtask = new Subtask(
@@ -148,7 +151,6 @@ class InMemoryTaskManagerTest {
                 "Сабтаск",
                 "Описание сабтаска",
                 Status.NEW,
-                Type.SUBTASK,
                 1
         );
         taskManager.addSubtask(subtask);
@@ -162,7 +164,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testDeleteSubtaskById() {
-        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW, Type.EPIC);
+        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW);
         taskManager.addEpic(epic);
 
         Subtask subtask = new Subtask(
@@ -170,7 +172,6 @@ class InMemoryTaskManagerTest {
                 "Сабтаск",
                 "Описание сабтаска",
                 Status.NEW,
-                Type.SUBTASK,
                 1
         );
         taskManager.addSubtask(subtask);
@@ -179,32 +180,32 @@ class InMemoryTaskManagerTest {
 
         List<Subtask> subtasks = taskManager.getSubtasks();
         assertEquals(0, subtasks.size(), "Subtasks list should be empty after deletion");
-        assertEquals(0, epic.getSubtaskList().size(), "Epic should have no subtasks after deletion");
+        assertEquals(0, epic.getSubtaskList().size(), "tasks.Epic should have no subtasks after deletion");
     }
 
     @Test
     void testUpdateEpicStatus() {
-        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW, Type.EPIC);
+        Epic epic = new Epic(1, "Эпик", "Описание эпика", Status.NEW);
         taskManager.addEpic(epic);
 
-        Subtask subtask1 = new Subtask(2, "Сабтаск 1", "Описание 1", Status.NEW, Type.SUBTASK, 1);
+        Subtask subtask1 = new Subtask(2, "Сабтаск 1", "Описание 1", Status.NEW, 1);
         subtask1.setStatus(Status.DONE);
         taskManager.addSubtask(subtask1);
 
-        Subtask subtask2 = new Subtask(3, "Сабтаск 2", "Описание 2", Status.NEW, Type.SUBTASK, 1);
+        Subtask subtask2 = new Subtask(3, "Сабтаск 2", "Описание 2", Status.NEW, 1);
         subtask2.setStatus(Status.NEW);
         taskManager.addSubtask(subtask2);
 
         taskManager.updateEpicStatus(epic);
 
-        assertEquals(Status.IN_PROGRESS, epic.getStatus(), "Epic status should be IN_PROGRESS when it has both DONE and NEW subtasks");
+        assertEquals(Status.IN_PROGRESS, epic.getStatus(), "tasks.Epic status should be IN_PROGRESS when it has both DONE and NEW subtasks");
 
         // Удалим подзадачу с статусом NEW и проверим статус
         taskManager.deleteSubtaskById(subtask2.getId());
 
         taskManager.updateEpicStatus(epic);
 
-        assertEquals(Status.DONE, epic.getStatus(), "Epic status should be DONE when all subtasks are DONE");
+        assertEquals(Status.DONE, epic.getStatus(), "tasks.Epic status should be DONE when all subtasks are DONE");
     }
 
 }

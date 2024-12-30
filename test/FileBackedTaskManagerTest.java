@@ -1,6 +1,12 @@
+import managers.FileBackedTaskManager;
+import managers.ManagerSaveException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,15 +31,14 @@ class FileBackedTaskManagerTest {
             reader = new FileReader(tempFile);
             br = new BufferedReader(reader);
 
-            manager.addTask(new Task(1, "Задача", "Описание задачи", Status.NEW, Type.TASK));
-            Epic epic = new Epic(2, "Эпик", "Описание эпик", Status.NEW, Type.EPIC);
+            manager.addTask(new Task(1, "Задача", "Описание задачи", Status.NEW));
+            Epic epic = new Epic(2, "Эпик", "Описание эпик", Status.NEW);
             manager.addEpic(epic);
             manager.addSubtask(new Subtask(
                     3,
                     "Подзадача",
                     "Описание подзадачи",
                     Status.NEW,
-                    Type.SUBTASK,
                     2)
             );
         } catch (IOException e) {
@@ -58,13 +63,13 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void loadFromFile() throws IOException {
+    void loadFromFile() {
         try {
             List<Task> beforeLoad = manager.getAllTasks();
             manager.loadFromFile(tempFile);
             List<Task> afterLoad = manager.getAllTasks();
             assertEquals(beforeLoad, afterLoad, "Списки до загрузки файла и после не равны.");
-        } catch (IOException e) {
+        } catch (ManagerSaveException e) {
             e.printStackTrace();
         }
     }

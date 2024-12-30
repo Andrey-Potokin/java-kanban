@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import tasks.Status;
+import tasks.Task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,8 +11,8 @@ public class TaskTest {
 
     @BeforeAll
     public static void beforeAll() {
-        task1 = new Task(1, "Задача 1", "Описание задачи 1", Status.NEW, Type.TASK);
-        task2 = new Task(2, "Задача 2", "Описание задачи 2", Status.NEW, Type.TASK);
+        task1 = new Task(1, "Задача 1", "Описание задачи 1", Status.NEW);
+        task2 = new Task(2, "Задача 2", "Описание задачи 2", Status.NEW);
     }
 
     @Test

@@ -1,22 +1,22 @@
+package tasks;
+
 public class Task {
     private int id;
     private String title;
     private String description;
     private Status status;
-    private Type type;
+    private Type type = Type.TASK;
 
-    public Task(String title, String description, Type type) {
+    public Task(String title, String description) {
         this.title = title;
         this.description = description;
-        this.type = type;
     }
 
-    public Task(int id, String title, String description, Status status, Type type) {
+    public Task(int id, String title, String description, Status status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
-        this.type = type;
     }
 
     public String getTitle() {
@@ -82,11 +82,12 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "tasks.Task{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", type=" + type +
                 '}';
     }
 }

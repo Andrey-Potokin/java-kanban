@@ -1,5 +1,8 @@
+import managers.InMemoryHistoryManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tasks.Status;
+import tasks.Task;
 
 import java.util.List;
 
@@ -15,7 +18,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testAddTaskToHistory() {
-        Task task = new Task(1, "Задача", "Описание", Status.NEW, Type.TASK);
+        Task task = new Task(1, "Задача", "Описание", Status.NEW);
         task.setId(1);
 
         // Добавляем задачу в историю
@@ -26,18 +29,18 @@ class InMemoryHistoryManagerTest {
 
         // Проверяем, что задача добавлена в историю
         assertEquals(1, history.size(), "History should contain one task");
-        assertEquals(task.getId(), history.get(0).getId(), "Task Id should match");
-        assertEquals(task.getTitle(), history.get(0).getTitle(), "Task title should match");
-        assertEquals(task.getDescription(), history.get(0).getDescription(), "Task description should match");
-        assertEquals(task.getStatus(), history.get(0).getStatus(), "Task status should match");
+        assertEquals(task.getId(), history.get(0).getId(), "tasks.Task Id should match");
+        assertEquals(task.getTitle(), history.get(0).getTitle(), "tasks.Task title should match");
+        assertEquals(task.getDescription(), history.get(0).getDescription(), "tasks.Task description should match");
+        assertEquals(task.getStatus(), history.get(0).getStatus(), "tasks.Task status should match");
     }
 
     @Test
     void testMultipleTasksInHistory() {
-        Task task1 = new Task(1, "Задача 1", "Описание 1", Status.NEW, Type.TASK);
+        Task task1 = new Task(1, "Задача 1", "Описание 1", Status.NEW);
         task1.setId(1);
 
-        Task task2 = new Task(2, "Задача 2", "Описание 2", Status.NEW, Type.TASK);
+        Task task2 = new Task(2, "Задача 2", "Описание 2", Status.NEW);
         task2.setId(2);
 
         // Добавляем задачи в историю
@@ -57,9 +60,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testRemoveNodeFromHistory() {
-        Task task1 = new Task(1, "Задача 1", "Описание 1", Status.NEW, Type.TASK);
+        Task task1 = new Task(1, "Задача 1", "Описание 1", Status.NEW);
         task1.setId(1);
-        Task task2 = new Task(2, "Задача 2", "Описание 2", Status.NEW, Type.TASK);
+        Task task2 = new Task(2, "Задача 2", "Описание 2", Status.NEW);
         task2.setId(2);
 
         // Добавляем задачи в историю
@@ -81,7 +84,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testAddSameTaskMultipleTimes() {
-        Task task = new Task(1, "Задача", "Описание", Status.NEW, Type.TASK);
+        Task task = new Task(1, "Задача", "Описание", Status.NEW);
         task.setId(1);
 
         // Добавляем задачу в историю дважды

@@ -1,3 +1,7 @@
+package managers;
+
+import tasks.*;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -44,9 +48,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     // восстанавливает данные менеджера из файла при запуске программы.
-    public FileBackedTaskManager loadFromFile(File file) throws IOException {
+    public FileBackedTaskManager loadFromFile(File file) {
+        FileBackedTaskManager manager;
         try {
-            TaskManager manager = Managers.getDefault();
+            manager = new FileBackedTaskManager(file);
             List<String> lines = Files.readAllLines(file.toPath());
 
             for (String line : lines) {
@@ -61,9 +66,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ManagerSaveException("Ошибка загрузки");
         }
-        return new FileBackedTaskManager(file);
+        return manager;
     }
 
     // создает задачу из строки
@@ -76,12 +81,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String description = split[4];
 
         if (split[1].equals("TASK")) {
-            return new Task(id, title, description, status, type);
+            return new Task(id, title, description, status);
         } else if (split[1].equals("EPIC")) {
-            return new Epic(id, title, description, status, type);
+            return new Epic(id, title, description, status);
         } else {
             int epicId = Integer.parseInt(split[5]);
-            return new Subtask(id, title, description, status, type, epicId);
+            return new Subtask(id, title, description, status, epicId);
         }
     }
 
