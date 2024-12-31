@@ -1,6 +1,9 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import tasks.Status;
+import tasks.Task;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskTest {
     public static Task task1;
@@ -8,15 +11,15 @@ public class TaskTest {
 
     @BeforeAll
     public static void beforeAll() {
-        task1 = new Task("Задача 1", "Описание задачи 1");
-        task2 = new Task("Задача 2", "Описание задачи 2");
+        task1 = new Task(1, "Задача 1", "Описание задачи 1", Status.NEW);
+        task2 = new Task(2, "Задача 2", "Описание задачи 2", Status.NEW);
     }
 
     @Test
     public void testTasksEqualityById() {
-        task1.setID(1);
-        task2.setID(1);
+        task1.setId(1);
+        task2.setId(1);
 
-        assertEquals(task1, task2, "Задачи с одинаковыми id должны быть равны");
+        assertEquals(task1, task2, "Задачи с одинаковыми Id должны быть равны");
     }
 }

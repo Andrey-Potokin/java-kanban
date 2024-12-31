@@ -1,21 +1,22 @@
-public class Task {
+package tasks;
 
+public class Task {
+    private int id;
     private String title;
     private String description;
-    private int id;
     private Status status;
+    private Type type = Type.TASK;
+
+    public Task(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 
     public Task(int id, String title, String description, Status status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
-    }
-
-    public Task(String title, String description) {
-        this.title = title;
-        this.description = description;
-        this.status = Status.NEW;
     }
 
     public String getTitle() {
@@ -34,11 +35,11 @@ public class Task {
         this.description = description;
     }
 
-    public int getID() {
+    public int getId() {
         return id;
     }
 
-    public void setID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -50,12 +51,20 @@ public class Task {
         this.status = status;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return getID() == task.getID();
+        return getId() == task.getId();
     }
 
     @Override
@@ -73,11 +82,12 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "tasks.Task{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", type=" + type +
                 '}';
     }
 }
