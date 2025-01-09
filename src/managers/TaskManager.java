@@ -19,6 +19,8 @@ public interface TaskManager {
 
     void updateEpicStatus(Epic epic);
 
+    void updateEpicStartTimeAndEndTime(Epic epic);
+
     void updateSubtask(Subtask subtask);
 
     Task getTaskById(int id);
@@ -50,4 +52,8 @@ public interface TaskManager {
     void deleteSubtaskById(int id);
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
+
+    boolean isValidIntersection(Task task);
 }
