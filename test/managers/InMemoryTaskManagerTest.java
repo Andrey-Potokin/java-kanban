@@ -15,7 +15,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     @Override
     @BeforeEach
     public void setUp() {
-        taskManager = new InMemoryTaskManager();
+        manager = new InMemoryTaskManager();
         task = new Task(
                 0,
                 Type.TASK,
@@ -83,8 +83,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         String originalDescription = task.getDescription();
         Status originalStatus = task.getStatus();
 
-        taskManager.addTask(task);
-        Task addedTask = taskManager.getTaskById(1);
+        manager.addTask(task);
+        Task addedTask = manager.getTaskById(1);
 
         assertEquals(originalTitle, addedTask.getTitle(), "Заголовок должен остаться тем же");
         assertEquals(originalDescription, addedTask.getDescription(), "Описание должно остаться тем же");
@@ -104,8 +104,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         task2.setDuration(Duration.ofHours(1));
 
 
-        taskManager.addTask(task);
-        assertDoesNotThrow(() -> taskManager.addTask(task2));
+        manager.addTask(task);
+        assertDoesNotThrow(() -> manager.addTask(task2));
     }
 
     /**
@@ -119,7 +119,14 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         task2.setStartTime(LocalDateTime.of(2025, JANUARY, 1, 1, 1));
         task2.setDuration(Duration.ofHours(1));
 
-        taskManager.addTask(task);
-        assertThrows(IllegalArgumentException.class, () -> taskManager.addTask(task2), "tasks.addTask должен выбрасывать исключение IllegalArgumentException");
+        manager.addTask(task);
+        assertThrows(IllegalArgumentException.class, () -> manager.addTask(task2),
+                "tasks.addTask должен выбрасывать исключение IllegalArgumentException");
+    }
+
+    @Test
+    public void testAddSubtaskWithoutEpic() {
+        assertThrows(IllegalArgumentException.class, () -> manager.addSubtask(subtask),
+                "addSubtask() должен выбрасывать исключение IllegalArgumentException");
     }
 }

@@ -25,7 +25,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     public void setUp() throws IOException {
         // Создание временного файла
         tempFile = File.createTempFile("example", ".tmp");
-        taskManager = new FileBackedTaskManager(tempFile);
+        manager = new FileBackedTaskManager(tempFile);
         task = new Task(
                 0,
                 Type.TASK,
@@ -87,34 +87,26 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     }
 
     @Test
-    void testSave() {
-        try {
-            reader = new FileReader(tempFile);
-            br = new BufferedReader(reader);
+    void testSave() throws IOException {
+        reader = new FileReader(tempFile);
+        br = new BufferedReader(reader);
 
-            taskManager.addTask(task);
+        manager.addTask(task);
 
-            String line = br.readLine();
-            assertEquals("1, TASK, Задача, NEW, Описание задачи, 2025-01-01T00:00, PT1H", line);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String line = br.readLine();
+        assertEquals("1, TASK, Задача, NEW, Описание задачи, 2025-01-01T00:00, PT1H", line);
     }
 
     @Test
     void testLoadFromFile() {
-        try {
-            taskManager.addTask(task);
-            taskManager.addEpic(epic);
-            subtask.setEpicId(2);
-            taskManager.addSubtask(subtask);
+        manager.addTask(task);
+        manager.addEpic(epic);
+        subtask.setEpicId(2);
+        manager.addSubtask(subtask);
 
-            List<Task> beforeLoad = taskManager.getAllTasks();
-            taskManager.loadFromFile(tempFile);
-            List<Task> afterLoad = taskManager.getAllTasks();
-            assertEquals(beforeLoad, afterLoad, "Списки до загрузки файла и после не равны.");
-        } catch (ManagerSaveException e) {
-            e.printStackTrace();
-        }
+        List<Task> beforeLoad = manager.getAllTasks();
+        manager.loadFromFile(tempFile);
+        List<Task> afterLoad = manager.getAllTasks();
+        assertEquals(beforeLoad, afterLoad, "Списки до загрузки файла и после не равны.");
     }
 }

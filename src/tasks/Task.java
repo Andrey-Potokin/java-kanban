@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public class Task {
     private int id;
+    // todo данное поле можно убрать, переместив значение в геттер
     private Type type = Type.TASK;
     private String title;
     private Status status;
@@ -80,7 +81,7 @@ public class Task {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() { // дата и время завершения задачи
+    public LocalDateTime getEndTime() {
         return startTime.plusMinutes(duration.toMinutes());
     }
 

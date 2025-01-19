@@ -5,6 +5,7 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
     void addTask(Task task);
@@ -19,7 +20,9 @@ public interface TaskManager {
 
     void updateEpicStatus(Epic epic);
 
-    void updateEpicStartTimeAndEndTime(Epic epic);
+    void updateEpicStartTime(Epic epic);
+
+    void updateEpicEndTime(Epic epic);
 
     void updateSubtask(Subtask subtask);
 
@@ -53,7 +56,7 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    List<Task> getPrioritizedTasks();
+    Set<Task> getPrioritizedTasks();
 
     boolean isValidIntersection(Task task);
 }

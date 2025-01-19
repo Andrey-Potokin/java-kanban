@@ -14,13 +14,13 @@ import static java.time.Month.JANUARY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InMemoryHistoryManagerTest {
-    private InMemoryHistoryManager historyManager;
+    private InMemoryHistoryManager manager;
     private Task task;
     private Task task2;
 
     @BeforeEach
     void setUp() {
-        historyManager = new InMemoryHistoryManager();
+        manager = new InMemoryHistoryManager();
         task = new Task(
                 0,
                 Type.TASK,
@@ -49,10 +49,10 @@ class InMemoryHistoryManagerTest {
         task.setId(1);
 
         // Добавляем задачу в историю
-        historyManager.addTaskHistory(task);
+        manager.addTaskHistory(task);
 
         // Получаем историю задач
-        List<Task> history = historyManager.getHistory();
+        List<Task> history = manager.getHistory();
 
         // Проверяем, что задача добавлена в историю
         assertEquals(1, history.size(), "History должна содержать одну задачу");
@@ -71,11 +71,11 @@ class InMemoryHistoryManagerTest {
         task2.setId(2);
 
         // Добавляем задачи в историю
-        historyManager.addTaskHistory(task);
-        historyManager.addTaskHistory(task2);
+        manager.addTaskHistory(task);
+        manager.addTaskHistory(task2);
 
         // Получаем историю задач
-        List<Task> history = historyManager.getHistory();
+        List<Task> history = manager.getHistory();
 
         // Проверяем, что история содержит две задачи
         assertEquals(2, history.size(), "History должна содержать две задачи");
@@ -94,14 +94,14 @@ class InMemoryHistoryManagerTest {
         task2.setId(2);
 
         // Добавляем задачи в историю
-        historyManager.addTaskHistory(task);
-        historyManager.addTaskHistory(task2);
+        manager.addTaskHistory(task);
+        manager.addTaskHistory(task2);
 
         // Удаляем первую задачу из истории
-        historyManager.removeNode(historyManager.getNodes().get(task.getId()));
+        manager.removeNode(manager.getNodes().get(task.getId()));
 
         // Получаем историю задач
-        List<Task> history = historyManager.getHistory();
+        List<Task> history = manager.getHistory();
 
         // Проверяем, что история содержит только одну задачу
         assertEquals(1, history.size(), "History должна содержать одну задачу");
@@ -117,14 +117,14 @@ class InMemoryHistoryManagerTest {
         task2.setId(2);
 
         // Добавляем задачи в историю
-        historyManager.addTaskHistory(task);
-        historyManager.addTaskHistory(task2);
+        manager.addTaskHistory(task);
+        manager.addTaskHistory(task2);
 
         // Удаляем последнюю задачу из истории
-        historyManager.removeNode(historyManager.getNodes().get(task2.getId()));
+        manager.removeNode(manager.getNodes().get(task2.getId()));
 
         // Получаем историю задач
-        List<Task> history = historyManager.getHistory();
+        List<Task> history = manager.getHistory();
 
         // Проверяем, что история содержит только одну задачу
         assertEquals(1, history.size(), "History должна содержать одну задачу");
@@ -140,11 +140,11 @@ class InMemoryHistoryManagerTest {
         task.setId(1);
 
         // Добавляем задачу в историю дважды
-        historyManager.addTaskHistory(task);
-        historyManager.addTaskHistory(task);
+        manager.addTaskHistory(task);
+        manager.addTaskHistory(task);
 
         // Получаем историю задач
-        List<Task> history = historyManager.getHistory();
+        List<Task> history = manager.getHistory();
 
         // Проверяем, что история содержит только одну задачу
         assertEquals(1, history.size(), "History должна содержать одну задачу");
