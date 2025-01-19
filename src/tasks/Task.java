@@ -1,22 +1,32 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
     private int id;
-    private String title;
-    private String description;
-    private Status status;
+    // todo данное поле можно убрать, переместив значение в геттер
     private Type type = Type.TASK;
+    private String title;
+    private Status status;
+    private String description;
+    private LocalDateTime startTime;
+    private Duration duration;
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
     }
 
-    public Task(int id, String title, String description, Status status) {
+    public Task(int id, Type type, String title, Status status, String description, LocalDateTime startTime,
+                Duration duration) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
+        this.type = type;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public String getTitle() {
@@ -55,8 +65,24 @@ public class Task {
         return type;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration.toMinutes());
     }
 
     @Override
@@ -82,12 +108,15 @@ public class Task {
 
     @Override
     public String toString() {
-        return "tasks.Task{" +
-                "title='" + title + '\'' +
+        return "Task{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                ", title='" + title + '\'' +
+                ", status='" + status + '\'' +
                 ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                ", type=" + type +
+                ", startTime='" + startTime + '\'' +
+                ", duration='" + duration + '\'' +
+                ", endTime='" + getEndTime() +
                 '}';
     }
 }
