@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Set;
 
 public interface TaskManager {
-    void addTask(Task task);
+    void createTask(Task task);
 
-    void addEpic(Epic epic);
+    void createEpic(Epic epic);
 
-    void addSubtask(Subtask subtask);
+    void createSubtask(Subtask subtask);
 
     void updateTask(Task task);
 

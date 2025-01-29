@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    private File file;
+    private final File file;
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -63,11 +63,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 Task task = fromString(line);
                 Type type = task.getType();
                 if (type.equals(Type.TASK)) {
-                    manager.addTask(task);
+                    manager.createTask(task);
                 } else if (type.equals(Type.EPIC)) {
-                    manager.addEpic((Epic) task);
+                    manager.createEpic((Epic) task);
                 } else if (type.equals(Type.SUBTASK)) {
-                    manager.addSubtask((Subtask) task);
+                    manager.createSubtask((Subtask) task);
                 }
             }
         } catch (IOException e) {
@@ -80,42 +80,42 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static Task fromString(String value) {
         String[] split = value.split(", ");
         int id = Integer.parseInt(split[0]);
-        Type type = Type.valueOf(split[1]);
+        String type = split[1];
         String title = split[2];
         Status status = Status.valueOf(split[3]);
         String description = split[4];
         LocalDateTime startTime = LocalDateTime.parse(split[5]);
         Duration duration = Duration.parse(split[6]);
 
-        return switch (split[1]) {
-            case "TASK" -> new Task(id, type, title, status, description, startTime, duration);
+        return switch (type) {
+            case "TASK" -> new Task(id, title, status, description, startTime, duration);
             case "EPIC" -> {
                 LocalDateTime endTime = LocalDateTime.parse(split[7]);
-                yield new Epic(id, type, title, status, description, startTime, duration, endTime);
+                yield new Epic(id, title, status, description, startTime, duration, endTime);
             }
             case "SUBTASK" -> {
                 int epicId = Integer.parseInt(split[7]);
-                yield new Subtask(id, type, title, status, description, startTime, duration, epicId);
+                yield new Subtask(id, title, status, description, startTime, duration, epicId);
             }
             default -> throw new IllegalArgumentException("Неверный тип задачи");
         };
     }
 
     @Override
-    public void addTask(Task task) {
-        super.addTask(task);
+    public void createTask(Task task) {
+        super.createTask(task);
         save();
     }
 
     @Override
-    public void addEpic(Epic epic) {
-        super.addEpic(epic);
+    public void createEpic(Epic epic) {
+        super.createEpic(epic);
         save();
     }
 
     @Override
-    public void addSubtask(Subtask subtask) {
-        super.addSubtask(subtask);
+    public void createSubtask(Subtask subtask) {
+        super.createSubtask(subtask);
         save();
     }
 

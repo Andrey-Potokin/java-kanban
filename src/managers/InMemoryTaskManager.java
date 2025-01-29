@@ -25,15 +25,15 @@ public class InMemoryTaskManager implements TaskManager {
      * Добавляет задачу без пересечения с другими задачами.
      *
      * @param task задача, которую нужно добавить
-     * @throws IllegalArgumentException если задача пересекается с другими задачами
+     * @throws TaskIntersectionException если задача пересекается с другими задачами
      */
     @Override
-    public void addTask(Task task) {
+    public void createTask(Task task) {
         if (task.getId() == 0) {
             if (!isValidIntersection(task)) {
                 task.setId(generateId());
             } else {
-                throw new IllegalArgumentException("Пересечение задач");
+                throw new TaskIntersectionException("Пересечение задач");
             }
         }
         tasks.put(task.getId(), task);
@@ -42,15 +42,15 @@ public class InMemoryTaskManager implements TaskManager {
     /**
      * Добавляет Epic без пересечения с другими задачами.
      * @param epic
-     * @throws IllegalArgumentException если задача пересекается с другими задачами
+     * @throws TaskIntersectionException если задача пересекается с другими задачами
      */
     @Override
-    public void addEpic(Epic epic) {
+    public void createEpic(Epic epic) {
         if (epic.getId() == 0) {
             if (!isValidIntersection(epic)) {
                 epic.setId(generateId());
             } else {
-                throw new IllegalArgumentException("Пересечение задач");
+                throw new TaskIntersectionException("Пересечение задач");
             }
         }
         epics.put(epic.getId(), epic);
@@ -59,24 +59,24 @@ public class InMemoryTaskManager implements TaskManager {
     /**
      * Добавляет Subtask без пересечения с другими задачами.
      * @param subtask
-     * @throws IllegalArgumentException если задача пересекается с другими задачами
+     * @throws TaskIntersectionException если задача пересекается с другими задачами
      */
     @Override
-    public void addSubtask(Subtask subtask) {
+    public void createSubtask(Subtask subtask) {
         Epic epic = epics.get(subtask.getEpicId());
         if (epic != null) {
             if (subtask.getId() == 0) {
                 if (!isValidIntersection(subtask)) {
                     subtask.setId(generateId());
                 } else {
-                    throw new IllegalArgumentException("Пересечение задач");
+                    throw new TaskIntersectionException("Пересечение задач");
                 }
             }
         } else {
             throw new IllegalArgumentException("Сначала нужно создать Эпик");
         }
         validateSubtaskAndEpic(subtask, epic);
-        epic.addSubtask(subtask);
+        epic.createSubtask(subtask);
         subtasks.put(subtask.getId(), subtask);
         updateEpicStatus(epic);
         updateEpicStartTime(epic);
@@ -102,7 +102,7 @@ public class InMemoryTaskManager implements TaskManager {
             int taskId = task.getId();
             tasks.replace(taskId, task);
         } else {
-            throw new IllegalArgumentException("Пересечение задач");
+            throw new TaskIntersectionException("Пересечение задач");
         }
     }
 
@@ -141,7 +141,7 @@ public class InMemoryTaskManager implements TaskManager {
             // Обновление статуса эпика
             updateEpicStatus(epic);
         } else {
-            throw new IllegalArgumentException("Пересечение задач");
+            throw new TaskIntersectionException("Пересечение задач");
         }
     }
 
@@ -160,26 +160,39 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStartTime(epic);
             updateEpicEndTime(epic);
         } else {
-            throw new IllegalArgumentException("Пересечение задач");
+            throw new TaskIntersectionException("Пересечение задач");
         }
     }
 
     @Override
-    public Task getTaskById(int id) {
-        historyManager.addTaskHistory(tasks.get(id));
-        return tasks.get(id);
+    public Task getTaskById(int id) throws IllegalArgumentException {
+        if (tasks.containsKey(id)) {
+            historyManager.createTaskHistory(tasks.get(id));
+            return tasks.get(id);
+        } else {
+            throw new IllegalArgumentException("Задача с таким id (" + id + ") не найдена");
+
+        }
     }
 
     @Override
-    public Epic getEpicById(int id) {
-        historyManager.addTaskHistory(epics.get(id));
-        return epics.get(id);
+    public Epic getEpicById(int id) throws IllegalArgumentException {
+        if (epics.containsKey(id)) {
+            historyManager.createTaskHistory(epics.get(id));
+            return epics.get(id);
+        } else {
+            throw new IllegalArgumentException("Эпик с таким id (" + id + ") не найден");
+        }
     }
 
     @Override
-    public Subtask getSubtaskById(int id) {
-        historyManager.addTaskHistory(subtasks.get(id));
-        return subtasks.get(id);
+    public Subtask getSubtaskById(int id) throws IllegalArgumentException {
+        if (subtasks.containsKey(id)) {
+            historyManager.createTaskHistory(subtasks.get(id));
+            return subtasks.get(id);
+        } else {
+            throw new IllegalArgumentException("Подзадача с таким id (" + id + ") не найдена");
+        }
     }
 
     @Override

@@ -22,7 +22,6 @@ class EpicTest {
         manager = new InMemoryTaskManager();
         epic = new Epic(
                 1,
-                Type.EPIC,
                 "Задача",
                 Status.NEW,
                 "Описание задачи",
@@ -32,7 +31,6 @@ class EpicTest {
         );
         epic2 = new Epic(
                 2,
-                Type.EPIC,
                 "Задача2",
                 Status.NEW,
                 "Описание задачи2",
@@ -42,7 +40,6 @@ class EpicTest {
         );
         subtask = new Subtask(
                 3,
-                Type.SUBTASK,
                 "Подзадача",
                 Status.NEW,
                 "Описание подзадачи",
@@ -52,7 +49,6 @@ class EpicTest {
         );
         subtask2 = new Subtask(
                 4,
-                Type.SUBTASK,
                 "Подзадача2",
                 Status.NEW,
                 "Описание подзадачи",
@@ -72,9 +68,9 @@ class EpicTest {
 
     @Test
     public void testEpicStatusIsNewWhenAllSubtasksAreNew() {
-        manager.addEpic(epic);
-        manager.addSubtask(subtask);
-        manager.addSubtask(subtask2);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
+        manager.createSubtask(subtask2);
 
         assertEquals(Status.NEW, epic.getStatus(), "Статус задачи должен быть NEW");
     }
@@ -84,9 +80,9 @@ class EpicTest {
         subtask.setStatus(Status.DONE);
         subtask2.setStatus(Status.DONE);
 
-        manager.addEpic(epic);
-        manager.addSubtask(subtask);
-        manager.addSubtask(subtask2);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
+        manager.createSubtask(subtask2);
 
         assertEquals(Status.DONE, epic.getStatus(), "Статус задачи должен быть DONE");
     }
@@ -96,9 +92,9 @@ class EpicTest {
         subtask.setStatus(Status.NEW);
         subtask2.setStatus(Status.DONE);
 
-        manager.addEpic(epic);
-        manager.addSubtask(subtask);
-        manager.addSubtask(subtask2);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
+        manager.createSubtask(subtask2);
 
         assertEquals(Status.IN_PROGRESS, epic.getStatus(), "Статус задачи должен быть IN_PROGRESS");
     }
@@ -108,9 +104,9 @@ class EpicTest {
         subtask.setStatus(Status.IN_PROGRESS);
         subtask2.setStatus(Status.IN_PROGRESS);
 
-        manager.addEpic(epic);
-        manager.addSubtask(subtask);
-        manager.addSubtask(subtask2);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
+        manager.createSubtask(subtask2);
 
         assertEquals(Status.IN_PROGRESS, epic.getStatus(), "Статус задачи должен быть IN_PROGRESS");
     }

@@ -2,7 +2,10 @@ package managers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.*;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -18,7 +21,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         manager = new InMemoryTaskManager();
         task = new Task(
                 0,
-                Type.TASK,
                 "Задача",
                 Status.NEW,
                 "Описание задачи",
@@ -27,7 +29,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         );
         task2 = new Task(
                 0,
-                Type.TASK,
                 "Задача2",
                 Status.NEW,
                 "Описание задачи2",
@@ -36,7 +37,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         );
         epic = new Epic(
                 0,
-                Type.EPIC,
                 "Эпик",
                 Status.NEW,
                 "Описание эпик",
@@ -46,7 +46,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         );
         epic2 = new Epic(
                 0,
-                Type.EPIC,
                 "Эпик2",
                 Status.NEW,
                 "Описание эпик2",
@@ -56,7 +55,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         );
         subtask = new Subtask(
                 0,
-                Type.SUBTASK,
                 "Подзадача",
                 Status.NEW,
                 "Описание подзадачи",
@@ -66,7 +64,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         );
         subtask2 = new Subtask(
                 0,
-                Type.SUBTASK,
                 "Подзадача2",
                 Status.NEW,
                 "Описание подзадачи2",
@@ -83,7 +80,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         String originalDescription = task.getDescription();
         Status originalStatus = task.getStatus();
 
-        manager.addTask(task);
+        manager.createTask(task);
         Task addedTask = manager.getTaskById(1);
 
         assertEquals(originalTitle, addedTask.getTitle(), "Заголовок должен остаться тем же");
@@ -96,7 +93,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
      * Тест проверяет, что задачи не пересекаются во времени.
      */
     @Test
-    void testAddTaskWithoutIntersection() {
+    void testCreateTaskWithoutIntersection() {
         task.setStartTime(LocalDateTime.of(2020, 1, 1, 0, 0));
         task.setDuration(Duration.ofHours(1));
 
@@ -104,29 +101,29 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         task2.setDuration(Duration.ofHours(1));
 
 
-        manager.addTask(task);
-        assertDoesNotThrow(() -> manager.addTask(task2));
+        manager.createTask(task);
+        assertDoesNotThrow(() -> manager.createTask(task2));
     }
 
     /**
      * Тест проверяет, что задачи пересекаются во времени.
      */
     @Test
-    void testAddTaskWithIntersection() {
+    void testCreateTaskWithIntersection() {
         task.setStartTime(LocalDateTime.of(2025, JANUARY, 1, 0, 0));
         task.setDuration(Duration.ofHours(2));
 
         task2.setStartTime(LocalDateTime.of(2025, JANUARY, 1, 1, 1));
         task2.setDuration(Duration.ofHours(1));
 
-        manager.addTask(task);
-        assertThrows(IllegalArgumentException.class, () -> manager.addTask(task2),
-                "tasks.addTask должен выбрасывать исключение IllegalArgumentException");
+        manager.createTask(task);
+        assertThrows(TaskIntersectionException.class, () -> manager.createTask(task2),
+                "tasks.createTask должен выбрасывать исключение TaskIntersectionException");
     }
 
     @Test
-    public void testAddSubtaskWithoutEpic() {
-        assertThrows(IllegalArgumentException.class, () -> manager.addSubtask(subtask),
-                "addSubtask() должен выбрасывать исключение IllegalArgumentException");
+    public void testCreateSubtaskWithoutEpic() {
+        assertThrows(IllegalArgumentException.class, () -> manager.createSubtask(subtask),
+                "createSubtask() должен выбрасывать исключение IllegalArgumentException");
     }
 }

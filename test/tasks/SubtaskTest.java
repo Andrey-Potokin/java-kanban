@@ -21,7 +21,6 @@ class SubtaskTest {
         manager = new InMemoryTaskManager();
         epic = new Epic(
                 1,
-                Type.EPIC,
                 "Задача",
                 Status.NEW,
                 "Описание задачи",
@@ -31,7 +30,6 @@ class SubtaskTest {
         );
         subtask = new Subtask(
                 2,
-                Type.SUBTASK,
                 "Подзадача",
                 Status.NEW,
                 "Описание подзадачи",
@@ -41,7 +39,6 @@ class SubtaskTest {
         );
         subtask2 = new Subtask(
                 3,
-                Type.SUBTASK,
                 "Подзадача2",
                 Status.NEW,
                 "Описание подзадачи",
