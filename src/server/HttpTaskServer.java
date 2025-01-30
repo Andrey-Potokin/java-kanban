@@ -1,16 +1,14 @@
 package server;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
 import managers.TaskManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 import static managers.Managers.getDefault;
+import static server.GsonFactory.getGson;
 
 public class HttpTaskServer {
     private static final int PORT = 8080;
@@ -21,14 +19,9 @@ public class HttpTaskServer {
     public HttpTaskServer(TaskManager manager) throws IOException {
         Gson gson = getGson();
         HttpTaskServer.manager = manager;
+        server = HttpServer.create(new InetSocketAddress(PORT), 0);
 
-        try {
-            server = HttpServer.create(new InetSocketAddress(PORT), 0);
-            setupContexts(gson);
-        } catch (IOException e) {
-            System.err.println("Ошибка при создании HTTP-сервера: " + e.getMessage());
-            throw e;
-        }
+        setupContexts(gson);
     }
 
     private void setupContexts(Gson gson) {
@@ -37,13 +30,6 @@ public class HttpTaskServer {
         server.createContext("/subtasks", new SubtaskHandler(gson, manager));
         server.createContext("/history", new HistoryHandler(gson, manager));
         server.createContext("/prioritized", new PrioritizedHandler(gson, manager));
-    }
-
-    public static Gson getGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .registerTypeAdapter(Duration.class, new DurationTypeAdapter())
-                .create();
     }
 
     public static void main(String[] args) {

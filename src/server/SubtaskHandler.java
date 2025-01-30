@@ -1,7 +1,6 @@
 package server;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import managers.TaskIntersectionException;
@@ -46,7 +45,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                 handlePostUpdateSubtask(exchange);
                 break;
             }
-            default:
+            case UNKNOWN:
                 sendText(exchange, "Некорректный запрос. Попробуйте еще раз", 400);
         }
     }
@@ -93,11 +92,8 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             sendText(exchange, "Подзадача создана", 201);
         } catch (TaskIntersectionException i) {
             sendHasInteractions(exchange);
-        } catch (JsonSyntaxException j) {
-            sendText(exchange, "Некорректный JSON", 400);
         } catch (Exception e) {
-            System.out.println("Ошибка сериализации: " + e.getMessage());
-            e.printStackTrace();
+            sendText(exchange, "Ошибка сервера", 500);
         }
     }
 
@@ -121,11 +117,8 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             sendHasInteractions(exchange);
         } catch (IllegalArgumentException i) {
             sendNotFound(exchange, subtaskId);
-        } catch (JsonSyntaxException j) {
-            sendText(exchange, "Некорректный JSON", 400);
         } catch (Exception e) {
-            System.out.println("Ошибка сериализации: " + e.getMessage());
-            e.printStackTrace();
+            sendText(exchange, "Ошибка сервера", 500);
         }
     }
 

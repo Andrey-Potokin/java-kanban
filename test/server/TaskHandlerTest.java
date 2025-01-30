@@ -21,12 +21,13 @@ import java.util.List;
 import static java.time.Month.JANUARY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static server.GsonFactory.getGson;
 
 public class TaskHandlerTest {
 
     TaskManager manager = new InMemoryTaskManager();
     HttpTaskServer hts = new HttpTaskServer(manager);
-    Gson gson = HttpTaskServer.getGson();
+    Gson gson = getGson();
 
     public TaskHandlerTest() throws IOException {
     }
