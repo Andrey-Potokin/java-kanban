@@ -28,8 +28,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public abstract void setUp() throws IOException;
 
     @Test
-    void testAddTask() {
-        manager.addTask(task);
+    void testCreateTask() {
+        manager.createTask(task);
 
         List<Task> tasks = manager.getTasks();
         assertEquals(1, tasks.size());
@@ -38,8 +38,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void testAddEpic() {
-        manager.addEpic(epic);
+    void testCreateEpic() {
+        manager.createEpic(epic);
 
         List<Epic> epics = manager.getEpics();
         assertEquals(1, epics.size());
@@ -51,8 +51,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void testAddSubtask() {
         subtask.setEpicId(1);
 
-        manager.addEpic(epic);
-        manager.addSubtask(subtask);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
 
         List<Subtask> subtasks = manager.getSubtasks();
         assertEquals(1, subtasks.size());
@@ -62,7 +62,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void testGetTaskById() {
-        manager.addTask(task);
+        manager.createTask(task);
 
         Task retrievedTask = manager.getTaskById(task.getId());
         assertNotNull(retrievedTask);
@@ -72,7 +72,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void testGetEpicById() {
-        manager.addEpic(epic);
+        manager.createEpic(epic);
 
         Epic retrievedEpic = manager.getEpicById(epic.getId());
         assertNotNull(retrievedEpic);
@@ -83,8 +83,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void testGetSubtaskById() {
         subtask.setEpicId(1);
-        manager.addEpic(epic);
-        manager.addSubtask(subtask);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
 
         Subtask retrievedSubtask = manager.getSubtaskById(subtask.getId());
         assertNotNull(retrievedSubtask);
@@ -97,9 +97,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         subtask.setEpicId(2);
         List<Task> expectedList = List.of(task, epic, subtask);
 
-        manager.addTask(task);
-        manager.addEpic(epic);
-        manager.addSubtask(subtask);
+        manager.createTask(task);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
 
         List<Task> actualList = manager.getAllTasks();
         assertEquals(3, actualList.size(), "Список должен быть 3");
@@ -110,8 +110,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void testGetTasks() {
         List<Task> expectedList = List.of(task , task2);
 
-        manager.addTask(task);
-        manager.addTask(task2);
+        manager.createTask(task);
+        manager.createTask(task2);
 
         List<Task> actualList = manager.getTasks();
         assertEquals(2, actualList.size(), "Список должен быть 2");
@@ -122,8 +122,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void testGetEpics() {
         List<Epic> expectedList = List.of(epic, epic2);
 
-        manager.addEpic(epic);
-        manager.addEpic(epic2);
+        manager.createEpic(epic);
+        manager.createEpic(epic2);
 
         List<Epic> actualList = manager.getEpics();
         assertEquals(2, actualList.size(), "Список должен быть 2");
@@ -138,9 +138,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         subtask2.setEpicId(1);
         subtask2.setId(3);
 
-        manager.addEpic(epic);
-        manager.addSubtask(subtask);
-        manager.addSubtask(subtask2);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
+        manager.createSubtask(subtask2);
 
         List<Subtask> actualList = manager.getSubtasks();
         assertEquals(2, actualList.size(), "Список должен быть 2");
@@ -155,9 +155,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         subtask2.setEpicId(1);
         subtask2.setId(3);
 
-        manager.addEpic(epic);
-        manager.addSubtask(subtask);
-        manager.addSubtask(subtask2);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
+        manager.createSubtask(subtask2);
 
         List<Subtask> actualList = manager.getEpicSubtasks(epic);
         assertEquals(2, actualList.size(), "Список должен быть 2");
@@ -166,7 +166,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void testDeleteTasks() {
-        manager.addTask(task);
+        manager.createTask(task);
 
         manager.deleteTasks();
 
@@ -177,8 +177,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void testDeleteEpics() {
         subtask.setEpicId(1);
-        manager.addEpic(epic);
-        manager.addSubtask(subtask);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
 
         manager.deleteEpics();
 
@@ -190,9 +190,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void testDeleteSubtask() {
-        manager.addEpic(epic);
+        manager.createEpic(epic);
         subtask.setEpicId(1);
-        manager.addSubtask(subtask);
+        manager.createSubtask(subtask);
 
         manager.deleteSubtasks();
 
@@ -202,7 +202,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void testDeleteTaskById() {
-        manager.addTask(task);
+        manager.createTask(task);
         manager.deleteTaskById(task.getId());
 
         List<Task> tasks = manager.getTasks();
@@ -211,9 +211,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void testDeleteEpicById() {
-        manager.addEpic(epic);
+        manager.createEpic(epic);
         subtask.setEpicId(1);
-        manager.addSubtask(subtask);
+        manager.createSubtask(subtask);
 
         manager.deleteEpicById(epic.getId());
 
@@ -228,9 +228,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void testDeleteSubtaskById() {
-        manager.addEpic(epic);
+        manager.createEpic(epic);
         subtask.setEpicId(1);
-        manager.addSubtask(subtask);
+        manager.createSubtask(subtask);
 
         manager.deleteSubtaskById(subtask.getId());
 
@@ -276,9 +276,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         epic.setStartTime(LocalDateTime.of(2025, JANUARY, 1, 5, 0));
         List<Task> actualList = List.of(task2, task, epic);
 
-        manager.addTask(task);
-        manager.addTask(task2);
-        manager.addEpic(epic);
+        manager.createTask(task);
+        manager.createTask(task2);
+        manager.createEpic(epic);
 
         List<Task> prioritizedTasks = List.copyOf(manager.getPrioritizedTasks());
         assertEquals(3, prioritizedTasks.size());

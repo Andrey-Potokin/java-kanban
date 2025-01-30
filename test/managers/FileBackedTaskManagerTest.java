@@ -2,7 +2,10 @@ package managers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.*;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,7 +31,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         manager = new FileBackedTaskManager(tempFile);
         task = new Task(
                 0,
-                Type.TASK,
                 "Задача",
                 Status.NEW,
                 "Описание задачи",
@@ -37,7 +39,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         );
         task2 = new Task(
                 0,
-                Type.TASK,
                 "Задача2",
                 Status.NEW,
                 "Описание задачи2",
@@ -46,7 +47,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         );
         epic = new Epic(
                 0,
-                Type.EPIC,
                 "Эпик",
                 Status.NEW,
                 "Описание эпик",
@@ -56,7 +56,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         );
         epic2 = new Epic(
                 0,
-                Type.EPIC,
                 "Эпик2",
                 Status.NEW,
                 "Описание эпик2",
@@ -66,7 +65,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         );
         subtask = new Subtask(
                 0,
-                Type.SUBTASK,
                 "Подзадача",
                 Status.NEW,
                 "Описание подзадачи",
@@ -76,7 +74,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         );
         subtask2 = new Subtask(
                 0,
-                Type.SUBTASK,
                 "Подзадача2",
                 Status.NEW,
                 "Описание подзадачи2",
@@ -91,7 +88,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         reader = new FileReader(tempFile);
         br = new BufferedReader(reader);
 
-        manager.addTask(task);
+        manager.createTask(task);
 
         String line = br.readLine();
         assertEquals("1, TASK, Задача, NEW, Описание задачи, 2025-01-01T00:00, PT1H", line);
@@ -99,10 +96,10 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
 
     @Test
     void testLoadFromFile() {
-        manager.addTask(task);
-        manager.addEpic(epic);
+        manager.createTask(task);
+        manager.createEpic(epic);
         subtask.setEpicId(2);
-        manager.addSubtask(subtask);
+        manager.createSubtask(subtask);
 
         List<Task> beforeLoad = manager.getAllTasks();
         manager.loadFromFile(tempFile);

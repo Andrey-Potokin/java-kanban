@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Status;
 import tasks.Task;
-import tasks.Type;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -23,7 +22,6 @@ class InMemoryHistoryManagerTest {
         manager = new InMemoryHistoryManager();
         task = new Task(
                 0,
-                Type.TASK,
                 "Задача",
                 Status.NEW,
                 "Описание задачи",
@@ -32,7 +30,6 @@ class InMemoryHistoryManagerTest {
         );
         task2 = new Task(
                 0,
-                Type.TASK,
                 "Задача2",
                 Status.NEW,
                 "Описание задачи2",
@@ -41,15 +38,12 @@ class InMemoryHistoryManagerTest {
         );
     }
 
-    /**
-     * Добавляем задачу в историю
-     */
     @Test
-    void testAddTaskToHistory() {
+    void testCreateTaskToHistory() {
         task.setId(1);
 
         // Добавляем задачу в историю
-        manager.addTaskHistory(task);
+        manager.createTaskHistory(task);
 
         // Получаем историю задач
         List<Task> history = manager.getHistory();
@@ -62,17 +56,14 @@ class InMemoryHistoryManagerTest {
         assertEquals(task.getStatus(), history.getFirst().getStatus(), "tasks.Task status должен совпадать");
     }
 
-    /**
-     * Добавляем две задачи в историю
-     */
     @Test
     void testMultipleTasksInHistory() {
         task.setId(1);
         task2.setId(2);
 
         // Добавляем задачи в историю
-        manager.addTaskHistory(task);
-        manager.addTaskHistory(task2);
+        manager.createTaskHistory(task);
+        manager.createTaskHistory(task2);
 
         // Получаем историю задач
         List<Task> history = manager.getHistory();
@@ -85,17 +76,14 @@ class InMemoryHistoryManagerTest {
         assertEquals(task2.getId(), history.get(1).getId(), "Вторая задача должна быть task2");
     }
 
-    /**
-     * Удаляем первую задачу из истории
-     */
     @Test
     void testRemoveFirstTaskFromHistory() {
         task.setId(1);
         task2.setId(2);
 
         // Добавляем задачи в историю
-        manager.addTaskHistory(task);
-        manager.addTaskHistory(task2);
+        manager.createTaskHistory(task);
+        manager.createTaskHistory(task2);
 
         // Удаляем первую задачу из истории
         manager.removeNode(manager.getNodes().get(task.getId()));
@@ -117,8 +105,8 @@ class InMemoryHistoryManagerTest {
         task2.setId(2);
 
         // Добавляем задачи в историю
-        manager.addTaskHistory(task);
-        manager.addTaskHistory(task2);
+        manager.createTaskHistory(task);
+        manager.createTaskHistory(task2);
 
         // Удаляем последнюю задачу из истории
         manager.removeNode(manager.getNodes().get(task2.getId()));
@@ -131,17 +119,13 @@ class InMemoryHistoryManagerTest {
         assertEquals(task.getId(), history.getFirst().getId(), "Оставшаяся задача должна быть task");
     }
 
-
-    /**
-     * Проверяем, что задачи добавляются в историю только один раз
-     */
     @Test
     void testAddSameTaskMultipleTimes() {
         task.setId(1);
 
         // Добавляем задачу в историю дважды
-        manager.addTaskHistory(task);
-        manager.addTaskHistory(task);
+        manager.createTaskHistory(task);
+        manager.createTaskHistory(task);
 
         // Получаем историю задач
         List<Task> history = manager.getHistory();

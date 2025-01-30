@@ -11,7 +11,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private final DoublyLinkedList<Task> tasksHistory = new DoublyLinkedList<>();
 
     @Override
-    public void addTaskHistory(Task task) {
+    public void createTaskHistory(Task task) {
         if (tasksHistory.getNodes().containsKey(task.getId())) {
             removeNode(tasksHistory.getNodes().get(task.getId()));
         }
@@ -20,7 +20,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        return tasksHistory.getTask();
+        return tasksHistory.getTasks();
     }
 
     // todo должен быть метод remove(int Id)
@@ -61,7 +61,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             nodes.put(((Task) element).getId(), newNode);
         }
 
-        public List<Task> getTask() {
+        public List<Task> getTasks() {
             List<Task> tasks = new ArrayList<>();
             Node<T> current = head;
             while (current != null) {

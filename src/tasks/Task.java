@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 
 public class Task {
     private int id;
-    // todo данное поле можно убрать, переместив значение в геттер
-    private Type type = Type.TASK;
     private String title;
     private Status status;
     private String description;
@@ -18,15 +16,17 @@ public class Task {
         this.description = description;
     }
 
-    public Task(int id, Type type, String title, Status status, String description, LocalDateTime startTime,
-                Duration duration) {
+    public Task(int id, String title, Status status, String description, LocalDateTime startTime, Duration duration) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
-        this.type = type;
         this.startTime = startTime;
         this.duration = duration;
+    }
+
+    public Type getType() {
+        return Type.TASK;
     }
 
     public String getTitle() {
@@ -59,10 +59,6 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public Type getType() {
-        return type;
     }
 
     public Duration getDuration() {
@@ -110,7 +106,7 @@ public class Task {
     public String toString() {
         return "Task{" +
                 "id='" + id + '\'' +
-                ", type='" + type + '\'' +
+                ", type='" + getType() + '\'' +
                 ", title='" + title + '\'' +
                 ", status='" + status + '\'' +
                 ", description='" + description + '\'' +
