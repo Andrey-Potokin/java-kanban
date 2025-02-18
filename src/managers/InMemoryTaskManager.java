@@ -1,5 +1,6 @@
 package managers;
 
+import exceptions.TaskIntersectionException;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
@@ -41,6 +42,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * Добавляет Epic без пересечения с другими задачами.
+     *
      * @param epic
      * @throws TaskIntersectionException если задача пересекается с другими задачами
      */
@@ -58,6 +60,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * Добавляет Subtask без пересечения с другими задачами.
+     *
      * @param subtask
      * @throws TaskIntersectionException если задача пересекается с другими задачами
      */
@@ -97,6 +100,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @param task задача, которую нужно обновить
      */
     @Override
+    // TODO переписать метод с учетом полей с null значениями и без метода replace
     public void updateTask(Task task) {
         if (!isValidIntersection(task)) {
             int taskId = task.getId();
@@ -112,6 +116,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @param epic эпик, который нужно обновить
      */
     @Override
+    // TODO переписать метод с учетом полей с null значениями и без метода replace
     public void updateEpic(Epic epic) {
         if (!isValidIntersection(epic)) {
             // Получение идентификатора
@@ -146,6 +151,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    // TODO переписать метод с учетом полей с null значениями и без метода replace
     public void updateSubtask(Subtask subtask) {
         if (!isValidIntersection(subtask)) {
             int subtaskId = subtask.getId();
@@ -272,6 +278,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * Устанавливает статус Epic в зависимости от статуса подзадач.
+     *
      * @param epic
      */
     @Override
@@ -299,6 +306,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * Устанавливает время начала Epic. Начало Epic совпадает с началом самой ранней подзадачи.
+     *
      * @param epic
      */
     @Override
@@ -311,6 +319,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * Устанавливает время окончания Epic. Конец Epic совпадает с концом самой последней подзадачи.
+     *
      * @param epic
      */
     @Override
